@@ -13,7 +13,8 @@ class Program:
   # Funktion zum Auslesen des Programms
   def getColor(self, k, s):
     # wenn k oder s außerhalb, dann mit Modulo nach innerhalb verschieben
-    return self.program[s % self.ns][k % self.nk]
+    color = self.program[s % self.ns][k % self.nk]
+    return tuple(color.tolist())
 
 ###################################################################################################
 # Klasse für die Fadenkonfiguration
@@ -55,7 +56,7 @@ class Loom:
     for s in range(smin, smax):
       for k in range(kmin, kmax):
         # lese das Programm aus (Umwandlung in Python tuple)
-        color = tuple(self.program.getColor(k, s).tolist())
+        color = self.program.getColor(k, s)
 
         # Farbe bestimmen in Zieltextur setzen
         if color == (255, 0, 0, 255):
@@ -66,11 +67,11 @@ class Loom:
           # ... dann die Kette drüber zeichnen
           diffuse[s*pps     :  s*pps+pps                     , k*ppk+ok :  k*ppk+ok+self.config.width_k] = self.config.color_k
           # Glanzpunkte setzen
-          if tuple(self.program.getColor(k, s-1).tolist()) != (255, 0, 0, 255):
+          if self.program.getColor(k, s-1) != (255, 0, 0, 255):
             of2 = 5
           else:
             of2 = 0
-          if tuple(self.program.getColor(k, s+1).tolist()) != (255, 0, 0, 255):
+          if self.program.getColor(k, s+1) != (255, 0, 0, 255):
             of3 = 5
           else:
             of3 = 0
