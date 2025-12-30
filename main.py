@@ -64,8 +64,18 @@ class Loom:
           diffuse[s*pps+os:s*pps+os+self.config.width_s, k*ppk:k*ppk+ppk] = self.config.color_s
           # ... dann die Kette drüber zeichnen
           diffuse[s*pps:s*pps+pps, k*ppk+ok:k*ppk+ok+self.config.width_k] = self.config.color_k
+          
           # Glanzpunkte setzen
-          diffuse[s*pps:s*pps+pps, k*ppk+ok+2:k*ppk+ok+4] = self.config.color_g
+          if tuple(self.program.getColor(k, s-1).tolist()) != (255, 0, 0, 255):
+            of2 = 5
+          else:
+            of2 = 0
+          if tuple(self.program.getColor(k, s+1).tolist()) != (255, 0, 0, 255):
+            of3 = 5
+          else:
+            of3 = 0
+          
+          diffuse[s*pps+of2:s*pps+pps-of3, k*ppk+ok+2:k*ppk+ok+4] = self.config.color_g
         else:
           # Schuss oben
           # erst die Kette, ...
